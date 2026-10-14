@@ -1,0 +1,105 @@
+
+import com.sun.net.httpserver.HttpServer;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
+
+public class AmazinggraceWebsite {
+    public static void main(String[] args) throws Exception {
+        HttpServer server = HttpServer.create(
+                new InetSocketAddress(8080), 0);
+
+        server.createContext("/", exchange -> {
+            String html = """
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport"
+                        content="width=device-width, initial-scale=1.0">
+                  <title>Amazinggrace</title>
+                  <style>
+                    body {
+                      margin: 0;
+                      font-family: Arial, sans-serif;
+                      text-align: center;
+                      background: #f4f0e6;
+                      color: #203c32;
+                    }
+                    header {
+                      background: #203c32;
+                      color: white;
+                      padding: 40px 15px;
+                    }
+                    header p { color: #f2d69b; }
+                    main {
+                      max-width: 600px;
+                      margin: 30px auto;
+                      padding: 25px;
+                      background: white;
+                      border-radius: 12px;
+                    }
+                    a { color: #176b50; }
+                    .button {
+                      display: inline-block;
+                      padding: 12px 20px;
+                      background: #b52b2b;
+                      color: white;
+                      border-radius: 6px;
+                      text-decoration: none;
+                    }
+                    footer {
+                      background: #203c32;
+                      color: white;
+                      padding: 20px;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <header>
+                    <h1>Amazinggrace</h1>
+                    <p>Believe in God</p>
+                    <h2>Collins Letting</h2>
+                    <p>Musician</p>
+                  </header>
+                  <main>
+                    <h2>Welcome to My Website</h2>
+                    <p>Welcome to my music journey!</p>
+                    <p><b>Phone:</b>
+                      <a href="tel:0790928450">0790928450</a></p>
+                    <p><b>Email:</b>
+                      <a href="mailto:collinsletting48@gmail.com">
+                      collinsletting48@gmail.com</a></p>
+                    <p><b>Location:</b> Kapsabet, Kenya</p>
+                    <p><b>YouTube:</b> Collins Letting</p>
+                    <p>
+                      <a class="button"
+                         href="https://www.youtube.com/results?search_query=Collins+Letting"
+                         target="_blank" rel="noopener">
+                         Find Me on YouTube
+                      </a>
+                    </p>
+                  </main>
+                  <footer>
+                    <p>Believe in God</p>
+                    <p>Copyright 2026 Amazinggrace</p>
+                  </footer>
+                </body>
+                </html>
+                """;
+
+            byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
+            exchange.getResponseHeaders().set(
+                    "Content-Type", "text/html; charset=UTF-8");
+            exchange.sendResponseHeaders(200, bytes.length);
+
+            try (OutputStream out = exchange.getResponseBody()) {
+                out.write(bytes);
+            }
+        });
+
+        server.start();
+        System.out.println(
+                "Website running at http://localhost:8080");
+    }
+}
